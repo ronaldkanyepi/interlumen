@@ -3,7 +3,7 @@
 import { LinkedIn, GitHub, Zoom, Google, Slack, Notion } from '@/components/logos'
 import { LogoIcon } from '@/components/logo'
 import { cn } from '@/lib/utils'
-import { Button } from '@/components/ui/button'
+import { buttonVariants } from '@/components/ui/button'
 import Link from 'next/link'
 
 export function IntegrationsSection() {
@@ -62,12 +62,12 @@ export function IntegrationsSection() {
                     <div className="bg-gradient-to-t from-background relative z-20 mx-auto mt-12 max-w-lg space-y-6 from-55% text-center">
                         <p className="text-muted-foreground">Seamlessly integrate with the tools you already use to land your job.</p>
 
-                        <Button
-                            variant="outline"
-                            size="sm"
-                            asChild>
-                            <Link href="/register">Get Started</Link>
-                        </Button>
+                        <Link
+                            href="/auth/register"
+                            className={cn(buttonVariants({ variant: "outline", size: "sm" }))}
+                        >
+                            Get Started
+                        </Link>
                     </div>
                 </div>
             </div>
