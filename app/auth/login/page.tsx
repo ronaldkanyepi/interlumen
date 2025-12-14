@@ -1,15 +1,47 @@
+"use client";
+
+import { useState, useTransition } from "react";
 import Link from "next/link";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Github } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { signInAction } from "@/lib/actions/auth";
+import { authClient } from "@/lib/auth/client";
 
 export default function LoginPage() {
+    const [error, setError] = useState("");
+    const [isPending, startTransition] = useTransition();
+    const [isSocialLoading, setIsSocialLoading] = useState<string | null>(null);
+
+    const handleSubmit = async (formData: FormData) => {
+        setError("");
+        startTransition(async () => {
+            const result = await signInAction(formData);
+            if (result && "error" in result) {
+                setError(result.error);
+            }
+        });
+    };
+
+    const handleSocialLogin = async (provider: "google" | "github") => {
+        setIsSocialLoading(provider);
+        setError("");
+        try {
+            await authClient.signIn.social({
+                provider,
+            });
+        } catch (err) {
+            setError(err instanceof Error ? err.message : "Failed to sign in with " + provider);
+            setIsSocialLoading(null);
+        }
+    };
+
     return (
         <section className="flex min-h-screen items-center justify-center bg-zinc-50 px-4 py-8 md:py-12 dark:bg-transparent">
             <form
-                action=""
+                action={handleSubmit}
                 className="bg-card mx-auto h-fit w-full max-w-sm rounded-[calc(var(--radius)+.125rem)] border p-0.5 shadow-md dark:[--color-muted:var(--color-zinc-900)]">
                 <div className="p-8 pb-6">
                     <div>
@@ -18,21 +50,48 @@ export default function LoginPage() {
                     </div>
 
                     <div className="mt-6 grid grid-cols-2 gap-3">
-                        <Button variant="outline" type="button">
-                            <svg className="mr-2 h-4 w-4" aria-hidden="true" focusable="false" data-prefix="fab" data-icon="google" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 488 512">
-                                <path fill="currentColor" d="M488 261.8C488 403.3 391.1 504 248 504 110.8 504 0 393.2 0 256S110.8 8 248 8c66.8 0 123 24.5 166.3 64.9l-67.5 64.9C258.5 52.6 94.3 116.6 94.3 256c0 86.5 69.1 156.6 153.7 156.6 98.2 0 135-70.4 140.8-106.9H248v-85.3h236.1c2.3 12.7 3.9 24.9 3.9 41.4z"></path>
-                            </svg>
-                            <span>Google</span>
+                        <Button
+                            variant="outline"
+                            type="button"
+                            onClick={() => handleSocialLogin("google")}
+                            disabled={isSocialLoading !== null}
+                        >
+                            {isSocialLoading === "google" ? (
+                                "Loading..."
+                            ) : (
+                                <>
+                                    <svg className="mr-2 h-4 w-4" aria-hidden="true" focusable="false" data-prefix="fab" data-icon="google" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 488 512">
+                                        <path fill="currentColor" d="M488 261.8C488 403.3 391.1 504 248 504 110.8 504 0 393.2 0 256S110.8 8 248 8c66.8 0 123 24.5 166.3 64.9l-67.5 64.9C258.5 52.6 94.3 116.6 94.3 256c0 86.5 69.1 156.6 153.7 156.6 98.2 0 135-70.4 140.8-106.9H248v-85.3h236.1c2.3 12.7 3.9 24.9 3.9 41.4z"></path>
+                                    </svg>
+                                    <span>Google</span>
+                                </>
+                            )}
                         </Button>
-                        <Button variant="outline" type="button">
-                            <Github className="mr-2 h-4 w-4" />
-                            <span>Github</span>
+                        <Button
+                            variant="outline"
+                            type="button"
+                            onClick={() => handleSocialLogin("github")}
+                            disabled={isSocialLoading !== null}
+                        >
+                            {isSocialLoading === "github" ? (
+                                "Loading..."
+                            ) : (
+                                <>
+                                    <Github className="mr-2 h-4 w-4" />
+                                    <span>Github</span>
+                                </>
+                            )}
                         </Button>
                     </div>
 
                     <hr className="my-4 border-dashed" />
 
                     <div className="space-y-6">
+                        {error && (
+                            <div className="p-3 text-sm text-destructive bg-destructive/10 border border-destructive/20 rounded-md">
+                                {error}
+                            </div>
+                        )}
                         <div className="space-y-2">
                             <Label htmlFor="email" className="block text-sm">
                                 Email
@@ -61,14 +120,14 @@ export default function LoginPage() {
                             <Input
                                 type="password"
                                 required
-                                name="pwd"
+                                name="password"
                                 id="password"
                             />
                         </div>
 
-                        <Link href="/home">
-                            <Button className="w-full">Sign In</Button>
-                        </Link>
+                        <Button className="w-full" type="submit" disabled={isPending}>
+                            {isPending ? "Signing in..." : "Sign In"}
+                        </Button>
                     </div>
                 </div>
 
