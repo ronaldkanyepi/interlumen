@@ -1,0 +1,62 @@
+import { betterAuth } from "better-auth";
+import { nextCookies } from "better-auth/next-js";
+import { Pool } from "pg";
+
+const baseURL = process.env.BETTER_AUTH_URL ||
+  process.env.NEXT_PUBLIC_APP_URL ||
+  "http://localhost:3000";
+
+const database = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  connectionTimeoutMillis: 5000,
+  idleTimeoutMillis: 30000,
+  max: 10,
+  allowExitOnIdle: true,
+});
+
+database.on('error', (err) => {
+});
+
+export const auth = betterAuth({
+  secret: process.env.BETTER_AUTH_SECRET || process.env.AUTH_SECRET,
+  database: database,
+  baseURL,
+  basePath: "/api/auth",
+  user: {
+    changeEmail: {
+      enabled: true,
+      updateEmailWithoutVerification: true,
+    },
+    deleteUser: {
+      enabled: true,
+    },
+  },
+  emailAndPassword: {
+    enabled: true,
+    requireEmailVerification: false,
+    minPasswordLength: 8,
+  },
+  socialProviders: {
+    google: {
+      clientId: process.env.GOOGLE_CLIENT_ID || "",
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
+    },
+    github: {
+      clientId: process.env.GITHUB_CLIENT_ID || "",
+      clientSecret: process.env.GITHUB_CLIENT_SECRET || "",
+    },
+  },
+  trustedOrigins: [baseURL],
+  session: {
+    expiresIn: 60 * 60 * 24 * 7,
+    updateAge: 60 * 60 * 24,
+  },
+  rateLimit: {
+    window: 60,
+    max: 10,
+  },
+  plugins: [nextCookies()],
+});
+
+export type Session = typeof auth.$Infer.Session;
+export type User = typeof auth.$Infer.Session.user;
