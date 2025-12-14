@@ -10,7 +10,7 @@ type AnimatedGroupProps = {
         item?: Variants
     }
     preset?: "blur" | "fade-in-blur" | "scale" | "fade" | "slide"
-} & MotionProps
+} & Omit<MotionProps, "variants">
 
 const defaultVariants = {
     container: {
