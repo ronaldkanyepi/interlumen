@@ -17,12 +17,7 @@ export default async function NotFound() {
           <div className="flex flex-col items-center justify-center min-h-[400px] sm:min-h-[500px]">
             <div className="text-center space-y-8 sm:space-y-10 md:space-y-12 max-w-2xl mx-auto">
               <div className="relative flex flex-row items-center justify-center gap-2 sm:gap-4 font-bold text-8xl sm:text-9xl md:text-[10rem] lg:text-[12rem] text-primary leading-none select-none">
-                <span>4</span>
-                <FileQuestion
-                  className="w-[0.7em] h-[0.8em]"
-                  strokeWidth={1.5}
-                />
-                <span>4</span>
+                <span>404</span>
               </div>
 
               <div className="space-y-4 sm:space-y-5">

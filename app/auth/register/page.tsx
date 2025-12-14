@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Github } from "lucide-react";
+import { Github, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { signUpAction } from "@/lib/actions/auth";
 import { authClient } from "@/lib/auth/client";
@@ -45,6 +45,7 @@ export default function RegisterPage() {
         try {
             await authClient.signIn.social({
                 provider,
+                callbackURL: "/home",
             });
         } catch (err) {
             setError(err instanceof Error ? err.message : "Failed to sign in with " + provider);
@@ -59,7 +60,7 @@ export default function RegisterPage() {
                 className="bg-card mx-auto h-fit w-full max-w-sm rounded-[calc(var(--radius)+.125rem)] border p-0.5 shadow-md dark:[--color-muted:var(--color-zinc-900)]">
                 <div className="p-8 pb-6">
                     <div>
-                        <h1 className="mb-1 mt-4 text-xl font-semibold">Create an account</h1>
+                        <h1 className="mb-1 mt-4 text-xl font-semibold">Join <span className="text-primary">Inter</span>lume</h1>
                         <p className="text-sm text-muted-foreground">Enter your information immediately to get started</p>
                     </div>
 
@@ -71,7 +72,7 @@ export default function RegisterPage() {
                             disabled={isSocialLoading !== null}
                         >
                             {isSocialLoading === "google" ? (
-                                "Loading..."
+                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                             ) : (
                                 <>
                                     <svg className="mr-2 h-4 w-4" aria-hidden="true" focusable="false" data-prefix="fab" data-icon="google" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 488 512">
@@ -88,7 +89,7 @@ export default function RegisterPage() {
                             disabled={isSocialLoading !== null}
                         >
                             {isSocialLoading === "github" ? (
-                                "Loading..."
+                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                             ) : (
                                 <>
                                     <Github className="mr-2 h-4 w-4" />
@@ -130,7 +131,14 @@ export default function RegisterPage() {
                         </div>
 
                         <Button className="w-full mt-2" type="submit" disabled={isPending}>
-                            {isPending ? "Creating account..." : "Create account"}
+                            {isPending ? (
+                                <>
+                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                    Creating account...
+                                </>
+                            ) : (
+                                "Create account"
+                            )}
                         </Button>
                     </div>
                 </div>

@@ -63,7 +63,7 @@ export async function signInAction(
       return { error: extractErrorMessage(result.error) || "Invalid credentials" };
     }
 
-    redirect("/");
+    redirect("/home");
   } catch (error) {
     if (error && typeof error === "object" && "digest" in error && String(error.digest).startsWith("NEXT_REDIRECT")) {
       throw error;
@@ -106,7 +106,7 @@ export async function signUpAction(
       return { error: errorMsg };
     }
 
-    redirect("/");
+    redirect("/home");
   } catch (error) {
     if (error && typeof error === "object" && "digest" in error && String(error.digest).startsWith("NEXT_REDIRECT")) {
       throw error;

@@ -3,13 +3,19 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Activity, Trophy, Timer, Flame, Play, Calendar } from "lucide-react";
 import Link from "next/link";
+import { headers } from "next/headers";
+import { auth } from "@/lib/auth/config";
 
-export default function HomePage() {
+export default async function HomePage() {
+    const session = await auth.api.getSession({
+        headers: await headers(),
+    });
+
     return (
         <div className="grid gap-6">
             <div className="flex items-center justify-between">
                 <div>
-                    <h2 className="text-2xl font-bold tracking-tight">Welcome back, Ronald!</h2>
+                    <h2 className="text-2xl font-bold tracking-tight">Welcome back, {session?.user.name?.split(' ')[0]}!</h2>
                     <p className="text-muted-foreground">Ready to ace your next interview?</p>
                 </div>
                 <div className="flex items-center gap-2">

@@ -22,6 +22,12 @@ export const auth = betterAuth({
   database: database,
   baseURL,
   basePath: "/api/auth",
+  account: {
+    accountLinking: {
+      enabled: true,
+      trustedProviders: ["google", "github"],
+    },
+  },
   user: {
     changeEmail: {
       enabled: true,
