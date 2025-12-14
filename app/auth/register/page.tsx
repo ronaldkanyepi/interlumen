@@ -1,8 +1,9 @@
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Github } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 export default function RegisterPage() {
     return (
@@ -60,9 +61,12 @@ export default function RegisterPage() {
                 <div className="bg-muted rounded-b-[calc(var(--radius)+.125rem)] border-t p-3">
                     <p className="text-muted-foreground text-center text-sm">
                         Already have an account?
-                        <Button asChild variant="link" className="px-2 font-semibold">
-                            <Link href="/auth/login">Sign in</Link>
-                        </Button>
+                        <Link
+                            href="/auth/login"
+                            className={cn(buttonVariants({ variant: "link" }), "px-2 font-semibold")}
+                        >
+                            Sign in
+                        </Link>
                     </p>
                 </div>
             </form>

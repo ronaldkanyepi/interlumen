@@ -2,8 +2,9 @@
 
 import { useEffect } from "react";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { AlertCircle, RefreshCw, Home } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 export default function Error({
   error,
@@ -62,16 +63,13 @@ export default function Error({
                   <span className="font-medium">Try Again</span>
                 </span>
               </Button>
-              <Button
-                asChild
-                variant="outline"
-                className="h-12 rounded-full border-zinc-200 dark:border-zinc-800 bg-white/50 dark:bg-zinc-900/50 px-8 hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-all duration-300 group"
+              <Link
+                href="/"
+                className={cn(buttonVariants({ variant: "outline" }), "h-12 rounded-full border-zinc-200 dark:border-zinc-800 bg-white/50 dark:bg-zinc-900/50 px-8 hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-all duration-300 group flex items-center gap-2")}
               >
-                <Link href="/" className="flex items-center gap-2">
-                  <Home className="size-4 text-muted-foreground group-hover:text-foreground transition-colors" />
-                  <span className="font-medium">Go Home</span>
-                </Link>
-              </Button>
+                <Home className="size-4 text-muted-foreground group-hover:text-foreground transition-colors" />
+                <span className="font-medium">Go Home</span>
+              </Link>
             </div>
 
             <div className="pt-8 border-t border-border">

@@ -1,8 +1,9 @@
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Github } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 export default function LoginPage() {
     return (
@@ -50,11 +51,12 @@ export default function LoginPage() {
                                 <Label htmlFor="password" className="text-sm">
                                     Password
                                 </Label>
-                                <Button asChild variant="link" size="sm" className="px-0 h-auto font-normal text-muted-foreground hover:text-foreground">
-                                    <Link href="#" className="text-xs">
-                                        Forgot your Password?
-                                    </Link>
-                                </Button>
+                                <Link
+                                    href="#"
+                                    className={cn(buttonVariants({ variant: "link", size: "sm" }), "px-0 h-auto font-normal text-muted-foreground hover:text-foreground text-xs")}
+                                >
+                                    Forgot your Password?
+                                </Link>
                             </div>
                             <Input
                                 type="password"
@@ -73,9 +75,12 @@ export default function LoginPage() {
                 <div className="bg-muted rounded-b-[calc(var(--radius)+.125rem)] border-t p-3">
                     <p className="text-muted-foreground text-center text-sm">
                         Don't have an account?
-                        <Button asChild variant="link" className="px-2 font-semibold">
-                            <Link href="/auth/register">Create account</Link>
-                        </Button>
+                        <Link
+                            href="/auth/register"
+                            className={cn(buttonVariants({ variant: "link" }), "px-2 font-semibold")}
+                        >
+                            Create account
+                        </Link>
                     </p>
                 </div>
             </form>

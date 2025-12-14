@@ -289,7 +289,7 @@ export default function LandingPage() {
                         <p className="max-w-2xl mx-auto text-lg text-primary-foreground/80 mb-10">
                             Join Interlume today and start your journey to career success with AI-powered preparation.
                         </p>
-                        <Link href="/register">
+                        <Link href="/auth/register">
                             <Button size="lg" variant="secondary" className="text-lg h-12 px-8 font-semibold">
                                 Get Interview Ready Today
                             </Button>
