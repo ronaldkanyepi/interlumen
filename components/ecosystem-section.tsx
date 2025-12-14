@@ -1,6 +1,7 @@
-import { Button } from '@/components/ui/button'
+import { Button, buttonVariants } from '@/components/ui/button'
 import { ChevronRight } from 'lucide-react'
 import Link from 'next/link'
+import { cn } from '@/lib/utils'
 
 export function EcosystemSection() {
     return (
@@ -22,14 +23,13 @@ export function EcosystemSection() {
                             Interlume brings together advanced AI models, real-time analytics, and personalized coaching in one platform. We don't just give you questions; we provide the entire infrastructure you need to master behavioral and technical rounds.
                         </p>
 
-                        <Button
-                            asChild
-                            className="group h-12 rounded-full bg-[#ff2d55] hover:bg-[#ff2d55]/90 px-8 text-white shadow-lg shadow-[#ff2d55]/40 hover:shadow-[#ff2d55]/60 transition-all duration-300 hover:-translate-y-0.5 w-fit">
-                            <Link href="/register" className="flex items-center">
-                                <span className="font-semibold text-base">Start Your Journey</span>
-                                <ChevronRight className="ml-2 size-5 stroke-[3] transition-transform duration-300 group-hover:translate-x-1" />
-                            </Link>
-                        </Button>
+                        <Link
+                            href="/auth/register"
+                            className={cn(buttonVariants(), "group h-12 rounded-full bg-[#ff2d55] hover:bg-[#ff2d55]/90 px-8 text-white shadow-lg shadow-[#ff2d55]/40 hover:shadow-[#ff2d55]/60 transition-all duration-300 hover:-translate-y-0.5 w-fit flex items-center")}
+                        >
+                            <span className="font-semibold text-base">Start Your Journey</span>
+                            <ChevronRight className="ml-2 size-5 stroke-[3] transition-transform duration-300 group-hover:translate-x-1" />
+                        </Link>
                     </div>
                 </div>
             </div>
