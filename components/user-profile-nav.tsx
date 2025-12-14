@@ -68,25 +68,23 @@ export function UserProfileNav({ user }: UserProfileNavProps) {
     return (
         <>
             <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                    <button className="flex w-full items-center gap-2 rounded-lg p-1.5 text-left transition-colors hover:bg-muted/50 outline-none group focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
-                        <Avatar className="h-8 w-8 border border-primary/20 transition-all group-hover:border-primary/50">
-                            <AvatarImage src={user.image || ""} alt={user.name} />
-                            <AvatarFallback className="bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
-                                {user.name
-                                    .split(" ")
-                                    .map((n) => n[0])
-                                    .join("")
-                                    .slice(0, 2)
-                                    .toUpperCase()}
-                            </AvatarFallback>
-                        </Avatar>
-                        <div className="grid flex-1 gap-0.5 text-xs">
-                            <div className="font-semibold text-primary">{user.name}</div>
-                            <div className="text-muted-foreground truncate group-hover:text-foreground transition-colors">{user.email}</div>
-                        </div>
-                        <Settings className="ml-auto h-4 w-4 text-muted-foreground/50 group-hover:text-primary transition-colors" />
-                    </button>
+                <DropdownMenuTrigger className="flex w-full items-center gap-2 rounded-lg p-1.5 text-left transition-colors hover:bg-muted/50 outline-none group focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 bg-transparent border-none cursor-pointer">
+                    <Avatar className="h-8 w-8 border border-primary/20 transition-all group-hover:border-primary/50">
+                        <AvatarImage src={user.image || ""} alt={user.name} />
+                        <AvatarFallback className="bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+                            {user.name
+                                .split(" ")
+                                .map((n) => n[0])
+                                .join("")
+                                .slice(0, 2)
+                                .toUpperCase()}
+                        </AvatarFallback>
+                    </Avatar>
+                    <div className="grid flex-1 gap-0.5 text-xs">
+                        <div className="font-semibold text-primary">{user.name}</div>
+                        <div className="text-muted-foreground truncate group-hover:text-foreground transition-colors">{user.email}</div>
+                    </div>
+                    <Settings className="ml-auto h-4 w-4 text-muted-foreground/50 group-hover:text-primary transition-colors" />
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-56" align="start" side="top" sideOffset={8}>
                     <div className="px-2 py-1.5 text-sm font-normal">
@@ -163,7 +161,7 @@ export function UserProfileNav({ user }: UserProfileNavProps) {
                                         <Label className="text-sm font-medium">Appearance</Label>
                                         <Select defaultValue="system">
                                             <SelectTrigger className="w-full md:w-48 h-9 bg-secondary/50 border-0 ring-1 ring-white/10 focus:ring-primary">
-                                                <SelectValue placeholder="System" />
+                                                <SelectValue />
                                             </SelectTrigger>
                                             <SelectContent>
                                                 <SelectItem value="system">System</SelectItem>
@@ -177,7 +175,7 @@ export function UserProfileNav({ user }: UserProfileNavProps) {
                                         <Label className="text-sm font-medium">Accent color</Label>
                                         <Select defaultValue="default">
                                             <SelectTrigger className="w-full md:w-48 h-9 bg-secondary/50 border-0 ring-1 ring-white/10 focus:ring-primary">
-                                                <SelectValue placeholder="Rose (Default)" />
+                                                <SelectValue />
                                             </SelectTrigger>
                                             <SelectContent>
                                                 <SelectItem value="default">Rose (Default)</SelectItem>
@@ -192,7 +190,7 @@ export function UserProfileNav({ user }: UserProfileNavProps) {
                                         <Label className="text-sm font-medium">Language</Label>
                                         <Select defaultValue="auto">
                                             <SelectTrigger className="w-full md:w-48 h-9 bg-secondary/50 border-0 ring-1 ring-white/10 focus:ring-primary">
-                                                <SelectValue placeholder="Auto-detect" />
+                                                <SelectValue />
                                             </SelectTrigger>
                                             <SelectContent>
                                                 <SelectItem value="auto">Auto-detect</SelectItem>
@@ -211,7 +209,7 @@ export function UserProfileNav({ user }: UserProfileNavProps) {
                                         </div>
                                         <Select defaultValue="auto">
                                             <SelectTrigger className="w-full md:w-48 h-9 bg-secondary/50 border-0 ring-1 ring-white/10 focus:ring-primary">
-                                                <SelectValue placeholder="Auto-detect" />
+                                                <SelectValue />
                                             </SelectTrigger>
                                             <SelectContent>
                                                 <SelectItem value="auto">Auto-detect</SelectItem>
@@ -229,7 +227,7 @@ export function UserProfileNav({ user }: UserProfileNavProps) {
                                             </Button>
                                             <Select defaultValue="cove">
                                                 <SelectTrigger className="w-32 flex-1 md:flex-none h-9 bg-secondary/50 border-0 ring-1 ring-white/10 focus:ring-primary">
-                                                    <SelectValue placeholder="Cove" />
+                                                    <SelectValue />
                                                 </SelectTrigger>
                                                 <SelectContent>
                                                     <SelectItem value="cove">Cove</SelectItem>
