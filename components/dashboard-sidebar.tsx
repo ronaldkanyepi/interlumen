@@ -331,7 +331,7 @@ export function DashboardSidebar({ user }: DashboardSidebarProps) {
                                         <div className="flex gap-2">
                                             <Button variant="outline" size="sm" className="h-8" onClick={handleExportHistory}>Export</Button>
                                             <AlertDialog>
-                                                <AlertDialogTrigger asChild>
+                                                <AlertDialogTrigger>
                                                     <Button variant="destructive" size="sm" className="h-8">Delete</Button>
                                                 </AlertDialogTrigger>
                                                 <AlertDialogContent>
