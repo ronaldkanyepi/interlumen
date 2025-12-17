@@ -13,7 +13,7 @@ const STT_CONFIG = {
     DEFAULT_SAMPLE_RATE: 16000,
     DEFAULT_FORMAT_TURNS: true,
     MIN_BUFFER_SIZE: 3200,
-    END_UTTERANCE_SILENCE_THRESHOLD: "700",
+    END_UTTERANCE_SILENCE_THRESHOLD: "2000", // 2 seconds of silence before ending turn
     WS_BASE_URL: "wss://streaming.assemblyai.com/v3/ws",
 } as const;
 
