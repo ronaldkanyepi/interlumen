@@ -675,43 +675,29 @@ You now have the candidate's resume and the target job description. The intervie
                             done: chunk.done
                         }));
                         if (chunk.done) {
-                            const tts = new OpenAITTSClient({ voiceId: voiceId || "nova" });
-                            await tts.sendText(greeting);
-
-                            ws.send(JSON.stringify({ type: "agent_chunk", text: greeting }));
-
-                            let audioChunks = 0;
-                            for await (const chunk of tts.receiveEvents()) {
-                                audioChunks++;
-                                ws.send(JSON.stringify({
-                                    type: "tts_chunk",
-                                    audio: chunk.audio.toString("base64"),
-                                    done: chunk.done
-                                }));
-                                if (chunk.done) {
-                                    break;
-                                }
-                            }
-
-                            ws.send(JSON.stringify({ type: "tts_chunk", audio: "", done: true }));
-                            await tts.close();
-                        } catch (err) {
-                            ws.send(JSON.stringify({ type: "tts_chunk", audio: "", done: true }));
+                            break;
                         }
-                    },
-                    onMessage(event) {
-                        const data = event.data;
-                        if (Buffer.isBuffer(data)) {
-                            inputStream.push(new Uint8Array(data));
-                        } else if (data instanceof ArrayBuffer) {
-                            inputStream.push(new Uint8Array(data));
-                        } else if (typeof data === "string") {
-                            try {
-                                const msg = JSON.parse(data);
-                                if (msg.type === "end_session") {
-                                    manualEventStream.push({
-                                        type: "stt_output",
-                                        transcript: `<system_command>
+                    }
+
+                    ws.send(JSON.stringify({ type: "tts_chunk", audio: "", done: true }));
+                    await tts.close();
+                } catch (err) {
+                    ws.send(JSON.stringify({ type: "tts_chunk", audio: "", done: true }));
+                }
+            },
+            onMessage(event) {
+                const data = event.data;
+                if (Buffer.isBuffer(data)) {
+                    inputStream.push(new Uint8Array(data));
+                } else if (data instanceof ArrayBuffer) {
+                    inputStream.push(new Uint8Array(data));
+                } else if (typeof data === "string") {
+                    try {
+                        const msg = JSON.parse(data);
+                        if (msg.type === "end_session") {
+                            manualEventStream.push({
+                                type: "stt_output",
+                                transcript: `<system_command>
 <action>end_interview</action>
 <session_id>${sessionId || "unknown"}</session_id>
 <instructions>
@@ -729,19 +715,19 @@ The candidate has ended the interview. You must now:
 Do NOT speak the JSON data - just confirm feedback is saved.
 </instructions>
 </system_command>`,
-                                        ts: Date.now()
-                                    });
-                                }
-                            } catch (e) {
-                            }
+                                ts: Date.now()
+                            });
                         }
-                    },
+                    } catch (e) {
+                    }
+                }
+            },
             async onClose() {
-                        inputStream.cancel();
-                        await flushPromise;
-                    },
-                };
-            })
+                inputStream.cancel();
+                await flushPromise;
+            },
+        };
+    })
 );
 
 export { app, injectWebSocket };
