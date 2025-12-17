@@ -25,7 +25,11 @@ export async function proxy(request: NextRequest) {
     }
 
 
-    const sessionCookie = request.cookies.get("better-auth.session_token");
+
+    // Check for both secure and non-secure cookie names
+    // On HTTPS (like Render), browsers add __Secure- prefix automatically
+    const sessionCookie = request.cookies.get("__Secure-better-auth.session_token") ||
+        request.cookies.get("better-auth.session_token");
     const requiresAuth = pathname.startsWith("/home") ||
         pathname.startsWith("/interview") ||
         pathname.startsWith("/settings");

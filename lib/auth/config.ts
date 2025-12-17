@@ -73,6 +73,12 @@ export const auth = betterAuth({
   advanced: {
     useSecureCookies: baseURL.startsWith("https://"),
     cookiePrefix: "better-auth",
+    defaultCookieAttributes: {
+      sameSite: "lax",
+      secure: baseURL.startsWith("https://"),
+      httpOnly: true,
+      path: "/",
+    },
   },
   trustHost: true,
   rateLimit: {
