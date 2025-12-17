@@ -654,12 +654,14 @@ You now have the candidate's resume and the target job description. The intervie
                     }
 
                     let greeting = "Hello! I'm your AI interviewer today.";
+                    let needsFirstQuestion = false;
+
                     if (sessionContext.resumeText && sessionContext.jobDescription) {
                         greeting = "Hello! I've reviewed your resume and the job description. I'm ready to begin your mock interview. Let's start with you telling me a bit about yourself and why you're interested in this role.";
                     } else if (sessionContext.resumeText) {
-                        greeting = "Hello! I've reviewed your resume. Please share the job description you're targeting, or we can proceed with a general behavioral interview.";
+                        greeting = "Hello! I've reviewed your resume. Let's begin with you telling me about yourself and what kind of role you're looking for.";
                     } else {
-                        greeting = "Hello! I'm your AI interviewer. I'll ask you some questions, and the microphone will automatically activate when I'm done speaking. Let's begin!";
+                        greeting = "Hello! I'm your AI interviewer. Let's begin with you telling me a bit about yourself.";
                     }
 
                     const tts = new OpenAITTSClient({ voiceId: voiceId || "nova" });
@@ -678,27 +680,8 @@ You now have the candidate's resume and the target job description. The intervie
                         }
                     }
 
-
                     ws.send(JSON.stringify({ type: "tts_chunk", audio: "", done: true }));
                     await tts.close();
-
-                    // After greeting, prompt the agent to ask the first question
-                    // This triggers the interview flow
-                    const startPrompt = sessionContext.resumeText && sessionContext.jobDescription
-                        ? "" // Already asked a question in the greeting
-                        : `<system_instruction>
-The greeting is complete. Now ask your first behavioral interview question.
-Choose a relevant question based on the context provided (resume/job description if available).
-Remember: Ask ONE question at a time.
-</system_instruction>`;
-
-                    if (startPrompt) {
-                        manualEventStream.push({
-                            type: "stt_output",
-                            transcript: startPrompt,
-                            ts: Date.now()
-                        });
-                    }
                 } catch (err) {
                     ws.send(JSON.stringify({ type: "tts_chunk", audio: "", done: true }));
                 }
