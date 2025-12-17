@@ -469,29 +469,45 @@ app.get(
         const manualEventStream = writableIterator<VoiceAgentEvent>();
         const combinedEventStream = writableIterator<VoiceAgentEvent>();
 
-        const sttStream = async function* (audioStream: AsyncIterable<Uint8Array>) {
+        const sttStream = async function* (audioStream: AsyncIterable<Uint8Array>): AsyncGenerator<VoiceAgentEvent> {
             console.log("[STT] Creating new STT instance");
             const stt = new AssemblyAISTT({ sampleRate: 16000 });
             const vadFiltered = vadStream(audioStream);
+            const passthrough = writableIterator<VoiceAgentEvent>();
 
-            iife(async () => {
-                let chunkCount = 0;
-                for await (const chunk of vadFiltered) {
-                    await stt.sendAudio(chunk);
-                    chunkCount++;
-                    if (chunkCount % 50 === 0) {
-                        console.log(`[STT] Sent ${chunkCount} audio chunks`);
+            // Producer: pump audio chunks to AssemblyAI
+            const producer = (async () => {
+                try {
+                    let chunkCount = 0;
+                    for await (const chunk of vadFiltered) {
+                        await stt.sendAudio(chunk);
+                        chunkCount++;
+                        if (chunkCount % 50 === 0) {
+                            console.log(`[STT] Sent ${chunkCount} audio chunks`);
+                        }
                     }
+                    console.log(`[STT] Audio stream ended (total chunks: ${chunkCount})`);
+                } finally {
+                    await stt.close();
+                    console.log("[STT] STT closed");
                 }
-                console.log(`[STT] Audio stream ended, flushing... (total chunks: ${chunkCount})`);
-                await stt.flushAudio();
-                await stt.close();
-                console.log("[STT] STT closed");
-            });
+            })();
 
-            for await (const event of stt.receiveEvents()) {
-                console.log("[STT] Received event:", event.type);
-                yield event;
+            // Consumer: receive transcription events
+            const consumer = (async () => {
+                for await (const event of stt.receiveEvents()) {
+                    console.log("[STT] Received event:", event.type);
+                    passthrough.push(event);
+                }
+                passthrough.cancel();
+            })();
+
+            try {
+                // Yield events as they arrive
+                yield* passthrough;
+            } finally {
+                // Wait for producer and consumer to complete
+                await Promise.all([producer, consumer]);
             }
         };
 
