@@ -576,14 +576,13 @@ app.get(
             }
         };
 
-        iife(async () => {
-            for await (const chunk of inputStream) combinedEventStream.push(chunk);
-        });
 
+        // Process STT events from audio input
         iife(async () => {
             for await (const event of sttStream(inputStream)) combinedEventStream.push(event);
         });
 
+        // Process manual events (system messages, end session, etc.)
         iife(async () => {
             for await (const event of manualEventStream) combinedEventStream.push(event);
         });
@@ -660,7 +659,7 @@ You now have the candidate's resume and the target job description. The intervie
                     } else if (sessionContext.resumeText) {
                         greeting = "Hello! I've reviewed your resume. Please share the job description you're targeting, or we can proceed with a general behavioral interview.";
                     } else {
-                        greeting = "Hello! I'm your AI interviewer. Press the microphone button when you're ready to speak.";
+                        greeting = "Hello! I'm your AI interviewer. I'll ask you some questions, and the microphone will automatically activate when I'm done speaking. Let's begin!";
                     }
 
                     const tts = new OpenAITTSClient({ voiceId: voiceId || "nova" });
