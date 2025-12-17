@@ -112,13 +112,14 @@ export default async function HomePage() {
 
     return (
         <div className="grid gap-6">
-            <div className="flex items-center justify-between">
+
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
                     <h2 className="text-2xl font-bold tracking-tight">Welcome back, {session?.user.name?.split(' ')[0]}!</h2>
                     <p className="text-muted-foreground">Ready to ace your next interview?</p>
                 </div>
                 <div className="flex items-center gap-2">
-                    <Link href="/interview/setup" className={cn(buttonVariants(), "gap-2")}>
+                    <Link href="/interview/setup" className={cn(buttonVariants(), "w-full sm:w-auto gap-2")}>
                         <Play className="h-4 w-4" />
                         Start New Session
                     </Link>
@@ -168,8 +169,8 @@ export default async function HomePage() {
                 </Card>
             </div>
 
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-                <Card className="col-span-4">
+            <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-7">
+                <Card className="col-span-1 md:col-span-2 lg:col-span-4">
                     <CardHeader>
                         <CardTitle>Performance History</CardTitle>
                     </CardHeader>
@@ -182,7 +183,7 @@ export default async function HomePage() {
                         </div>
                     </CardContent>
                 </Card>
-                <Card className="col-span-3">
+                <Card className="col-span-1 md:col-span-2 lg:col-span-3">
                     <CardHeader>
                         <CardTitle>Recent Sessions</CardTitle>
                         <CardDescription>

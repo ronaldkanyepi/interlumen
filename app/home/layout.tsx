@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth/config";
 import { UserProfileNav } from "@/components/user-profile-nav";
 import { DashboardSidebar } from "@/components/dashboard-sidebar";
+import { MobileSidebar } from "@/components/mobile-sidebar";
 
 export default async function DashboardLayout({
     children,
@@ -39,6 +40,7 @@ export default async function DashboardLayout({
             {/* Main Content */}
             <div className="flex flex-1 flex-col overflow-hidden">
                 <header className="flex h-14 items-center gap-4 border-b bg-background px-6 lg:h-[60px]">
+                    <MobileSidebar user={session.user} />
                     <div className="w-full flex-1">
                         <h1 className="text-lg font-semibold">Dashboard</h1>
                     </div>

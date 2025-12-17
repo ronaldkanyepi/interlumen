@@ -197,12 +197,12 @@ export function InterviewSetupForm() {
             </div>
 
             {/* Footer Control Plane */}
-            <div className="h-16 border-t bg-muted/5 flex items-center justify-between px-6 shrink-0 z-20">
-                <div className="flex items-center gap-6">
-                    <div className="flex flex-col gap-1">
+            <div className="min-h-[4rem] h-auto py-3 sm:py-0 border-t bg-muted/5 flex flex-col sm:flex-row items-center justify-between px-4 sm:px-6 shrink-0 z-20 gap-3 sm:gap-0">
+                <div className="flex items-center gap-4 w-full sm:w-auto justify-between sm:justify-start">
+                    <div className="flex flex-col gap-1 flex-1 sm:flex-none">
                         <label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Seniority</label>
                         <Select value={seniority} onValueChange={(val: string | null) => val && setSeniority(val)}>
-                            <SelectTrigger className="h-8 w-[140px] bg-background border-border/50 text-xs shadow-sm">
+                            <SelectTrigger className="h-8 w-full sm:w-[140px] bg-background border-border/50 text-xs shadow-sm">
                                 <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
@@ -225,12 +225,12 @@ export function InterviewSetupForm() {
                 <Button
                     onClick={handleStart}
                     disabled={!isValid || isLoading}
-                    className="h-10 px-6 font-medium bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg shadow-primary/20 transition-all hover:scale-[1.02] active:scale-[0.98]"
+                    className="w-full sm:w-auto h-10 px-6 font-medium bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg shadow-primary/20 transition-all hover:scale-[1.02] active:scale-[0.98]"
                 >
                     {isLoading ? (
                         <>
                             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                            Initializing Environment...
+                            Initializing...
                         </>
                     ) : (
                         <>
