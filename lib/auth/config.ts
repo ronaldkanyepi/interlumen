@@ -60,17 +60,21 @@ export const auth = betterAuth({
   trustedOrigins: [
     baseURL,
     process.env.BETTER_AUTH_URL || "",
-    "https://interlume.onrender.com" // Hardcoded failsafe
+    "https://interlume.onrender.com"
   ].filter(Boolean),
   session: {
     expiresIn: 60 * 60 * 24 * 7,
     updateAge: 60 * 60 * 24,
+    cookieCache: {
+      enabled: true,
+      maxAge: 60 * 5,
+    },
   },
   advanced: {
-    useSecureCookies: true, // Force secure cookies in production
+    useSecureCookies: baseURL.startsWith("https://"),
+    cookiePrefix: "better-auth",
   },
   trustHost: true,
-  debug: true, // Enable debug logs
   rateLimit: {
     window: 60,
     max: 10,

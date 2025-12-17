@@ -30,6 +30,14 @@ export async function proxy(request: NextRequest) {
         pathname.startsWith("/interview") ||
         pathname.startsWith("/settings");
 
+    // Debug logging
+    if (requiresAuth) {
+        console.log(`[Middleware] Path: ${pathname}, Has Session Cookie: ${!!sessionCookie}`);
+        if (!sessionCookie) {
+            console.log("[Middleware] Available cookies:", request.cookies.getAll().map(c => c.name).join(", "));
+        }
+    }
+
     if (!sessionCookie && requiresAuth) {
         const loginUrl = new URL("/auth/login", request.url);
         loginUrl.searchParams.set("redirect", pathname);
