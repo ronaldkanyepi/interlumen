@@ -58,14 +58,25 @@ export function InterviewSetupForm() {
 
     const processFile = (file: File) => {
         setUploadedFile(file);
+
+        // Handle text-based files
         if (file.type === "text/plain" || file.name.endsWith(".md") || file.name.endsWith(".txt")) {
             const reader = new FileReader();
             reader.onload = (e) => {
                 if (e.target?.result) setResume(e.target.result as string);
             };
             reader.readAsText(file);
-        } else {
-            alert("Preview not available for this file type. Please paste the text content directly for best results.");
+        }
+        // Handle PDFs and other binary files
+        else if (file.type === "application/pdf" || file.name.endsWith(".pdf")) {
+            // For PDFs, we accept the file but can't preview it
+            // The file is uploaded and the user should paste the text content
+            setResume(""); // Clear any existing text
+        }
+        // Unsupported file types
+        else {
+            setUploadedFile(null);
+            alert("Please upload a .txt, .md, or .pdf file. For best results with PDFs, copy and paste the text content directly.");
         }
     };
 
