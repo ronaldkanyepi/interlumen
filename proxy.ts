@@ -26,8 +26,11 @@ export async function proxy(request: NextRequest) {
 
 
     const sessionCookie = request.cookies.get("better-auth.session_token");
+    const requiresAuth = pathname.startsWith("/home") ||
+        pathname.startsWith("/interview") ||
+        pathname.startsWith("/settings");
 
-    if (!sessionCookie && pathname.startsWith("/settings")) {
+    if (!sessionCookie && requiresAuth) {
         const loginUrl = new URL("/auth/login", request.url);
         loginUrl.searchParams.set("redirect", pathname);
         return NextResponse.redirect(loginUrl);

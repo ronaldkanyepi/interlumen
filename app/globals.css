@@ -125,3 +125,121 @@
     @apply bg-background text-foreground;
   }
 }
+
+@media print {
+  @page {
+    margin: 1cm;
+    size: auto;
+  }
+
+  html {
+    font-size: 11px;
+  }
+
+  /* Global white background unless overridden */
+  body,
+  .card,
+  .bg-card,
+  .bg-background,
+  .bg-muted,
+  .bg-muted\/30,
+  .bg-secondary,
+  .bg-secondary\/50 {
+    background-color: white !important;
+    background: white !important;
+    color: black !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Ensure colored indicators print correctly */
+  .bg-green-600 {
+    background-color: #16a34a !important;
+    /* green-600 */
+    color: white !important;
+  }
+
+  .bg-amber-500 {
+    background-color: #f59e0b !important;
+    /* amber-500 */
+    color: black !important;
+  }
+
+  .bg-red-500 {
+    background-color: #ef4444 !important;
+    /* red-500 */
+    color: white !important;
+  }
+
+  /* Preserve linear gradients (Progress Bar) */
+  .bg-gradient-to-r {
+    background-image: linear-gradient(to right, #ef4444, #f59e0b, #16a34a) !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+
+  /* Compacting Layout */
+  .container {
+    max-width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 100% !important;
+  }
+
+  /* Spacing Reductions */
+  .space-y-6> :not([hidden])~ :not([hidden]) {
+    margin-top: 1rem !important;
+  }
+
+  .space-y-10> :not([hidden])~ :not([hidden]) {
+    margin-top: 1.5rem !important;
+  }
+
+  .py-10 {
+    padding-top: 1rem !important;
+    padding-bottom: 1rem !important;
+  }
+
+  /* Card Optimizations */
+  .rounded-xl,
+  .rounded-lg,
+  .card {
+    border: 1px solid #ddd !important;
+    box-shadow: none !important;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  /* Hide Scrollbars and unnecessary backgrounds */
+  ::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Text adjustments */
+  h1 {
+    font-size: 1.5rem !important;
+    margin-bottom: 0.5rem !important;
+  }
+
+  h2 {
+    font-size: 1.25rem !important;
+    margin-bottom: 0.25rem !important;
+    margin-top: 1rem !important;
+  }
+
+  p,
+  li,
+  span {
+    line-height: 1.4 !important;
+  }
+
+  /* Ensure grid columns are maintained if space permits */
+  .md\:grid-cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .md\:col-span-2 {
+    grid-column: span 2 / span 2 !important;
+  }
+}

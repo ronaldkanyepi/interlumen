@@ -1,11 +1,10 @@
 
 import Link from "next/link";
-import { User } from "lucide-react";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth/config";
 import { UserProfileNav } from "@/components/user-profile-nav";
-import { DashboardNav } from "@/components/dashboard-nav";
+import { DashboardSidebar } from "@/components/dashboard-sidebar";
 
 export default async function DashboardLayout({
     children,
@@ -30,7 +29,7 @@ export default async function DashboardLayout({
                     </Link>
                 </div>
                 <div className="flex-1 overflow-y-auto py-4">
-                    <DashboardNav />
+                    <DashboardSidebar user={session.user} />
                 </div>
                 <div className="border-t p-4">
                     <UserProfileNav user={session.user} />

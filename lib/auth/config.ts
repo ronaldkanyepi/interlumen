@@ -12,9 +12,14 @@ const database = new Pool({
   idleTimeoutMillis: 30000,
   max: 10,
   allowExitOnIdle: true,
+  ssl: {
+    rejectUnauthorized: false
+  }
 });
 
 database.on('error', (err) => {
+  // Suppress unhandled error
+  console.error('Unexpected error on idle client', err);
 });
 
 export const auth = betterAuth({

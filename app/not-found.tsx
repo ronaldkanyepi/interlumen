@@ -2,12 +2,10 @@ import Link from "next/link";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { FileQuestion, Home, ArrowLeft } from "lucide-react";
 import { HeroHeader } from "@/components/hero-header";
-import { getSession } from "@/lib/auth/server";
 import { Github, Linkedin } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export default async function NotFound() {
-  const session = await getSession();
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
