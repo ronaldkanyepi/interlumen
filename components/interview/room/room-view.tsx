@@ -438,7 +438,7 @@ export function InterviewRoomView({ sessionId = "demo" }: InterviewRoomViewProps
                             interviewStatus === 'speaking' ? 'Wait for agent to finish' :
                                 interviewStatus === 'processing' ? 'Agent is thinking...' :
                                     'Mic disabled') :
-                        (isMicActive ? 'Tap to stop speaking' : 'Tap to speak')
+                        (isMicActive ? 'Speaking... (pause to finish)' : 'Ready to listen')
                     }
                 </p>
             </div>

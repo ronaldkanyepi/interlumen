@@ -473,12 +473,13 @@ app.get(
             const stt = new AssemblyAISTT({ sampleRate: 16000 });
             const vadFiltered = vadStream(audioStream);
 
+            // Send audio continuously without closing the connection
             iife(async () => {
                 for await (const chunk of vadFiltered) {
                     await stt.sendAudio(chunk);
                 }
-                await stt.flushAudio();
-                await stt.close();
+                // Don't close STT - keep it open for the entire session
+                // await stt.close();
             });
 
             yield* stt.receiveEvents();
