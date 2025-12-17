@@ -470,21 +470,29 @@ app.get(
         const combinedEventStream = writableIterator<VoiceAgentEvent>();
 
         const sttStream = async function* (audioStream: AsyncIterable<Uint8Array>) {
+            console.log("[STT] Creating new STT instance");
             const stt = new AssemblyAISTT({ sampleRate: 16000 });
             const vadFiltered = vadStream(audioStream);
 
-            // Send audio continuously without closing the connection
             iife(async () => {
+                let chunkCount = 0;
                 for await (const chunk of vadFiltered) {
                     await stt.sendAudio(chunk);
+                    chunkCount++;
+                    if (chunkCount % 50 === 0) {
+                        console.log(`[STT] Sent ${chunkCount} audio chunks`);
+                    }
                 }
-                // Flush remaining audio to finalize transcript
+                console.log(`[STT] Audio stream ended, flushing... (total chunks: ${chunkCount})`);
                 await stt.flushAudio();
-                // Keep connection open for next turn
                 await stt.close();
+                console.log("[STT] STT closed");
             });
 
-            yield* stt.receiveEvents();
+            for await (const event of stt.receiveEvents()) {
+                console.log("[STT] Received event:", event.type);
+                yield event;
+            }
         };
 
         const agentStream = async function* (sttEventStream: AsyncIterable<VoiceAgentEvent>) {
