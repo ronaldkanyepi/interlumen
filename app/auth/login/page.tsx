@@ -26,14 +26,18 @@ export default function LoginPage() {
     };
 
     const handleSocialLogin = async (provider: "google" | "github") => {
+        console.log(`[Auth] Starting ${provider} sign-in...`);
         setIsSocialLoading(provider);
         setError("");
         try {
-            await authClient.signIn.social({
+            console.log(`[Auth] Calling authClient.signIn.social with provider: ${provider}`);
+            const result = await authClient.signIn.social({
                 provider,
                 callbackURL: "/home",
             });
+            console.log("[Auth] Sign-in result:", result);
         } catch (err) {
+            console.error(`[Auth] Error signing in with ${provider}:`, err);
             setError(err instanceof Error ? err.message : "Failed to sign in with " + provider);
             setIsSocialLoading(null);
         }

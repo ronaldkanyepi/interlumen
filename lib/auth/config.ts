@@ -57,15 +57,20 @@ export const auth = betterAuth({
       clientSecret: process.env.GITHUB_CLIENT_SECRET || "",
     },
   },
-  trustedOrigins: [baseURL],
+  trustedOrigins: [
+    baseURL,
+    process.env.BETTER_AUTH_URL || "",
+    "https://interlume.onrender.com" // Hardcoded failsafe
+  ].filter(Boolean),
   session: {
     expiresIn: 60 * 60 * 24 * 7,
     updateAge: 60 * 60 * 24,
   },
   advanced: {
-    useSecureCookies: process.env.NODE_ENV === "production",
+    useSecureCookies: true, // Force secure cookies in production
   },
   trustHost: true,
+  debug: true, // Enable debug logs
   rateLimit: {
     window: 60,
     max: 10,
