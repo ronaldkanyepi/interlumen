@@ -678,8 +678,27 @@ You now have the candidate's resume and the target job description. The intervie
                         }
                     }
 
+
                     ws.send(JSON.stringify({ type: "tts_chunk", audio: "", done: true }));
                     await tts.close();
+
+                    // After greeting, prompt the agent to ask the first question
+                    // This triggers the interview flow
+                    const startPrompt = sessionContext.resumeText && sessionContext.jobDescription
+                        ? "" // Already asked a question in the greeting
+                        : `<system_instruction>
+The greeting is complete. Now ask your first behavioral interview question.
+Choose a relevant question based on the context provided (resume/job description if available).
+Remember: Ask ONE question at a time.
+</system_instruction>`;
+
+                    if (startPrompt) {
+                        manualEventStream.push({
+                            type: "stt_output",
+                            transcript: startPrompt,
+                            ts: Date.now()
+                        });
+                    }
                 } catch (err) {
                     ws.send(JSON.stringify({ type: "tts_chunk", audio: "", done: true }));
                 }
