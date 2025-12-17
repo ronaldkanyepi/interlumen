@@ -478,8 +478,10 @@ app.get(
                 for await (const chunk of vadFiltered) {
                     await stt.sendAudio(chunk);
                 }
-                // Don't close STT - keep it open for the entire session
-                // await stt.close();
+                // Flush remaining audio to finalize transcript
+                await stt.flushAudio();
+                // Keep connection open for next turn
+                await stt.close();
             });
 
             yield* stt.receiveEvents();
@@ -696,7 +698,10 @@ You now have the candidate's resume and the target job description. The intervie
                 } else if (typeof data === "string") {
                     try {
                         const msg = JSON.parse(data);
-                        if (msg.type === "end_session") {
+                        if (msg.type === "end_turn") {
+                            // Close input stream to trigger STT finalization
+                            inputStream.cancel();
+                        } else if (msg.type === "end_session") {
                             manualEventStream.push({
                                 type: "stt_output",
                                 transcript: `<system_command>

@@ -294,6 +294,10 @@ export function InterviewRoomView({ sessionId = "demo" }: InterviewRoomViewProps
     };
 
     const stopRecording = () => {
+        // Send end_turn signal before cleanup
+        if (wsRef.current?.readyState === WebSocket.OPEN) {
+            wsRef.current.send(JSON.stringify({ type: "end_turn" }));
+        }
         cleanupRecording();
         if (interviewStatus === "listening") setInterviewStatus("processing");
     };
