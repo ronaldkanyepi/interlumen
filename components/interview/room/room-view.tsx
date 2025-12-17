@@ -43,6 +43,7 @@ export function InterviewRoomView({ sessionId = "demo" }: InterviewRoomViewProps
     const audioQueueRef = useRef<ArrayBuffer[]>([]);
     const isPlayingRef = useRef<boolean>(false);
     const isAudioReadyRef = useRef(false);
+    const autoStopTimerRef = useRef<NodeJS.Timeout | null>(null);
 
     useEffect(() => {
         let isMounted = true;
@@ -265,6 +266,13 @@ export function InterviewRoomView({ sessionId = "demo" }: InterviewRoomViewProps
             if (setMessage) {
                 setAgentMessage("I'm listening...");
             }
+
+            // Auto-stop after 30 seconds
+            autoStopTimerRef.current = setTimeout(() => {
+                console.log("[Mic] Auto-stopping after 30 seconds");
+                stopRecording();
+            }, 30000);
+
             console.log("[Mic] Recording started successfully");
         } catch (err) {
             console.error("[Mic] Error starting recording:", err);
@@ -273,6 +281,10 @@ export function InterviewRoomView({ sessionId = "demo" }: InterviewRoomViewProps
     };
 
     const cleanupRecording = () => {
+        if (autoStopTimerRef.current) {
+            clearTimeout(autoStopTimerRef.current);
+            autoStopTimerRef.current = null;
+        }
         processorRef.current?.disconnect();
         processorRef.current = null;
         audioContextRef.current?.close();
